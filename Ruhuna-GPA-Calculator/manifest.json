@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "Ruhuna SGPA Calculator",
+    "version": "2.1",
+    "description": "Automatically calculates and displays SGPA from grades on the Ruhuna website.",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://paravi.ruh.ac.lk/fofmstmis2021/index.php?view=admin&admin=11"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "icons": {
+        "48": "icon.png"
+    },
+    "author": {
+        "name": "Thanushanth Kanagarajah",
+        "email": "thanushanth.20@cse.mrt.ac.lk",
+        "url": ""
+    }
+}
