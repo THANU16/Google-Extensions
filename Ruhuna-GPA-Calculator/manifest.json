@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Ruhuna SGPA Calculator",
+    "name": "Ruhuna - FOFMSTMIS  SGPA Calculator",
     "version": "2.1",
-    "description": "Automatically calculates and displays SGPA from grades on the Ruhuna website.",
+    "description": "Automatically calculates and displays SGPA from grades using examination website grades on the university of Ruhuna Faculty of Fisheries and Marine Sciences & Technology Management Information System",
     "permissions": [
         "activeTab",
         "scripting"
@@ -22,7 +22,9 @@
     },
     "author": {
         "name": "Thanushanth Kanagarajah",
-        "email": "thanushanth.20@cse.mrt.ac.lk",
-        "url": ""
+        "email1": "thanushanth.20@cse.mrt.ac.lk",
+        "email2": "kanagarajahthanushanth@gmail.com",
+        "linkedin": "https://www.linkedin.com/in/kanagarajah-thanushanth/",
+        "github": "https://github.com/THANU16"
     }
 }
