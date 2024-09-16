@@ -3,7 +3,7 @@ function extractResults() {
   let courses = [];
   let resultTable = document.querySelector("#result2fmfw240 table");
   if (!resultTable) {
-    return courses;
+    return Error("No result table found.");
   }
   let allResults = [];
 
@@ -44,8 +44,7 @@ function extractResults() {
           }
         }
       }
-    }
-    if (row.cells.length >= 4) {
+    } else if (row.cells.length >= 4) {
       let courseUnit = row.cells[0].innerText || "";
       let subjectName = row.cells[1].innerText || "";
       let grade = row.cells[2].innerText || "";
@@ -131,53 +130,57 @@ function calculateSGPA(courses) {
 
 // Automatically calculate SGPA when the page loads
 window.addEventListener("load", () => {
-  const results = extractResults();
-  if (results.length > 0) {
-    const [sgpa, totalCredits, totalNonGPACredits] = calculateSGPA(results);
+  try {
+    const results = extractResults();
+    if (results.length > 0) {
+      const [sgpa, totalCredits, totalNonGPACredits] = calculateSGPA(results);
 
-    // Create a new table to display SGPA, total credits, and non-GPA credits
-    const resultTable = document.createElement("table");
-    resultTable.innerHTML = `
-          <tbody>
-            <tr>
-              <td>SGPA</td>
-              <td>${sgpa}</td>
-            </tr>
-            <tr>
-              <td>Total Credits</td>
-              <td>${totalCredits}</td>
-            </tr>
-            <tr>
-              <td>Total Non-GPA Credits</td>
-              <td>${totalNonGPACredits}</td>
-            </tr>
-          </tbody>
-        `;
+      // Create a new table to display SGPA, total credits, and non-GPA credits
+      const resultTable = document.createElement("table");
+      resultTable.innerHTML = `
+            <tbody>
+              <tr>
+                <td>SGPA</td>
+                <td>${sgpa}</td>
+              </tr>
+              <tr>
+                <td>Total Credits</td>
+                <td>${totalCredits}</td>
+              </tr>
+              <tr>
+                <td>Total Non-GPA Credits</td>
+                <td>${totalNonGPACredits}</td>
+              </tr>
+            </tbody>
+          `;
 
-    // Add some styling to the new table
-    resultTable.style.border = "1px solid #ccc";
-    resultTable.style.borderCollapse = "collapse";
-    resultTable.style.width = "770px";
-    resultTable.style.marginTop = "20px";
-    resultTable.style.marginBottom = "20px";
-    // i want to align the table to the center
-    resultTable.style.marginLeft = "auto";
-    resultTable.style.marginRight = "auto";
-    // resultTable.style.backgroundColor = "#f98f79";
-    resultTable.style.backgroundColor = "#FFFFFF";
+      // Add some styling to the new table
+      resultTable.style.border = "1px solid #ccc";
+      resultTable.style.borderCollapse = "collapse";
+      resultTable.style.width = "770px";
+      resultTable.style.marginTop = "20px";
+      resultTable.style.marginBottom = "20px";
+      // i want to align the table to the center
+      resultTable.style.marginLeft = "auto";
+      resultTable.style.marginRight = "auto";
+      // resultTable.style.backgroundColor = "#f98f79";
+      resultTable.style.backgroundColor = "#FFFFFF";
 
-    resultTable.style.color = "black";
-    resultTable.style.fontWeight = "bold";
+      resultTable.style.color = "black";
+      resultTable.style.fontWeight = "bold";
 
-    const cells = resultTable.querySelectorAll("td");
-    cells.forEach((cell) => {
-      cell.style.border = "1px solid #ddd";
-      cell.style.padding = "8px";
-    });
+      const cells = resultTable.querySelectorAll("td");
+      cells.forEach((cell) => {
+        cell.style.border = "1px solid #ddd";
+        cell.style.padding = "8px";
+      });
 
-    // Append the new table to the body, after the existing result table
-    document.body.appendChild(resultTable);
-  } else {
-    console.log("No results found for SGPA calculation.");
+      // Append the new table to the body, after the existing result table
+      document.body.appendChild(resultTable);
+    } else {
+      console.log("No results found for SGPA calculation.");
+    }
+  } catch (error) {
+    console.error("Error calculating SGPA:", error);
   }
 });
