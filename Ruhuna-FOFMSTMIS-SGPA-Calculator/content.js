@@ -144,7 +144,7 @@ window.addEventListener("load", () => {
                 <td>${sgpa}</td>
               </tr>
               <tr>
-                <td>Total Credits</td>
+                <td>Total GPA Credits</td>
                 <td>${totalCredits}</td>
               </tr>
               <tr>
