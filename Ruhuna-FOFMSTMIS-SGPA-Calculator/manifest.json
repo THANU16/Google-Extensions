@@ -1,32 +1,35 @@
 {
-    "manifest_version": 3,
-    "name": "Ruhuna - FOFMSTMIS SGPA Calculator",
-    "version": "3.3.1609",
-    "description": "Calculates and displays SGPA from grades using the examination website grades on the University of Ruhuna FOFMSTMIS.",
-    "permissions": ["activeTab"],
-    "content_scripts": [
-      {
-        "matches": [
-          "https://paravi.ruh.ac.lk/fofmstmis2021/index.php?view=admin&admin=11"
-        ],
-        "js": ["content.js"]
-      }
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "icons": {
-      "48": "icon.png"
-    },
-    "author": {
-      "name": "Thanushanth Kanagarajah",
-      "email1": "thanushanth.20@cse.mrt.ac.lk",
-      "email2": "kanagarajahthanushanth@gmail.com",
-      "linkedin": "https://www.linkedin.com/in/kanagarajah-thanushanth/",
-      "github": "https://github.com/THANU16"
+  "manifest_version": 3,
+  "name": "Ruhuna - FOFMSTMIS SGPA Calculator",
+  "version": "3.4.2.1709",
+  "description": "Calculates and displays SGPA from grades using the examination website grades on the University of Ruhuna FOFMSTMIS.",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://paravi.ruh.ac.lk/fofmstmis2021/index.php?view=admin&admin=11"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "icon.png"
+  },
+  "author": {
+    "name": "Thanushanth Kanagarajah",
+    "email1": "thanushanth.20@cse.mrt.ac.lk",
+    "email2": "kanagarajahthanushanth@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/kanagarajah-thanushanth/",
+    "github": "https://github.com/THANU16"
   }
-  
+}

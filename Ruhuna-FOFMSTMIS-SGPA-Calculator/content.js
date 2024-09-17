@@ -1,3 +1,8 @@
+const FDN = "FDN";
+const FDN_GPA_COURSES_FOR_FW = [
+  "FDN1131", // FDN1131 - Snorkelling and Life saving. This subject GPA for FW students
+];
+
 // Function to extract grades and credits from the table
 function extractResults() {
   let courses = [];
@@ -50,7 +55,7 @@ function extractResults() {
       let grade = row.cells[2].innerText || "";
       let year = row.cells[3].innerText || "";
       if (courseUnit) {
-        if (courseUnit.includes("FDN")) {
+        if (courseUnit.includes(FDN)) {
           GPA = false;
         } else {
           GPA = true;
@@ -110,22 +115,49 @@ function convertGradeToPoint(grade) {
 
 // Function to calculate SGPA
 function calculateSGPA(courses) {
-  let totalCredits = 0;
-  let totalPoints = 0;
-  let totalNonGPACredits = 0;
+  let totalGPACreditFs = 0;
+  let totalGPACreditFw = 0;
+  let totalNonGPACreditFs = 0;
+  let totalNonGPACreditFw = 0;
+  let totalPointsFs = 0;
+  let totalPointsFw = 0;
 
   courses.forEach((course) => {
     if (course.gpa) {
-      totalCredits += course.credit;
-      totalPoints += course.credit * convertGradeToPoint(course.grade);
+      totalGPACreditFs += course.credit;
+      totalPointsFs += course.credit * convertGradeToPoint(course.grade);
+
+      totalGPACreditFw += course.credit;
+      totalPointsFw += course.credit * convertGradeToPoint(course.grade);
     } else {
-      totalNonGPACredits += course.credit;
+      if (FDN_GPA_COURSES_FOR_FW.includes(course.courseUnit)) {
+        totalGPACreditFw += course.credit;
+        totalPointsFw += course.credit * convertGradeToPoint(course.grade);
+        totalNonGPACreditFs += course.credit;
+      } else {
+        totalNonGPACreditFs += course.credit;
+        totalNonGPACreditFw += course.credit;
+      }
     }
   });
 
-  let sgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "N/A";
+  let sgpaFs =
+    totalGPACreditFs > 0
+      ? (totalPointsFs / totalGPACreditFs).toFixed(2)
+      : "N/A";
+  let sgpaFw =
+    totalGPACreditFw > 0
+      ? (totalPointsFw / totalGPACreditFw).toFixed(2)
+      : "N/A";
 
-  return [sgpa, totalCredits, totalNonGPACredits];
+  return [
+    sgpaFs,
+    totalGPACreditFs,
+    totalNonGPACreditFs,
+    sgpaFw,
+    totalGPACreditFw,
+    totalNonGPACreditFw,
+  ];
 }
 
 // Automatically calculate SGPA when the page loads
@@ -133,23 +165,39 @@ window.addEventListener("load", () => {
   try {
     const results = extractResults();
     if (results.length > 0) {
-      const [sgpa, totalCredits, totalNonGPACredits] = calculateSGPA(results);
+      const [
+        sgpaFs,
+        totalGPACreditFs,
+        totalNonGPACreditFs,
+        sgpaFw,
+        totalGPACreditFw,
+        totalNonGPACreditFw,
+      ] = calculateSGPA(results);
 
       // Create a new table to display SGPA, total credits, and non-GPA credits
       const resultTable = document.createElement("table");
       resultTable.innerHTML = `
+            <thead>
+              <tr>
+                <th></th>
+                <th>FS</th>
+                <th>FW</th>
+              </tr>
             <tbody>
               <tr>
                 <td>SGPA</td>
-                <td>${sgpa}</td>
+                <td>${sgpaFs}</td>
+                <td>${sgpaFw}</td>
               </tr>
               <tr>
                 <td>Total GPA Credits</td>
-                <td>${totalCredits}</td>
+                <td>${totalGPACreditFs}</td>
+                <td>${totalGPACreditFw}</td>
               </tr>
               <tr>
                 <td>Total Non-GPA Credits</td>
-                <td>${totalNonGPACredits}</td>
+                <td>${totalNonGPACreditFs}</td>
+                <td>${totalNonGPACreditFw}</td>
               </tr>
             </tbody>
           `;
@@ -175,8 +223,23 @@ window.addEventListener("load", () => {
         cell.style.padding = "8px";
       });
 
+      const disclaimer = document.createElement("p");
+      disclaimer.textContent =
+        "Disclaimer : SGPA is calculated based on the grades and credits obtained from the result table. All " +
+        FDN +
+        " courses are considered as non-GPA courses. but " +
+        FDN_GPA_COURSES_FOR_FW +
+        " is considered as GPA course for FW students.";
+      disclaimer.style.fontStyle = "italic";
+      disclaimer.style.fontSize = "12px";
+      disclaimer.style.color = "#666";
+      disclaimer.style.marginTop = "20px";
+      disclaimer.style.marginBottom = "20px";
+      disclaimer.style.textAlign = "center";
+
       // Append the new table to the body, after the existing result table
       document.body.appendChild(resultTable);
+      document.body.appendChild(disclaimer);
     } else {
       console.log("No results found for SGPA calculation.");
     }
