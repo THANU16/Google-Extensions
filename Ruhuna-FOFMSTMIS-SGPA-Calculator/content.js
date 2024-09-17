@@ -115,49 +115,28 @@ function convertGradeToPoint(grade) {
 
 // Function to calculate SGPA
 function calculateSGPA(courses) {
-  let totalGPACreditFs = 0;
-  let totalGPACreditFw = 0;
-  let totalNonGPACreditFs = 0;
-  let totalNonGPACreditFw = 0;
-  let totalPointsFs = 0;
-  let totalPointsFw = 0;
+  let totalGPACredit = 0;
+  let totalNonGPACredit = 0;
+  let totalPoints = 0;
 
   courses.forEach((course) => {
     if (course.gpa) {
-      totalGPACreditFs += course.credit;
-      totalPointsFs += course.credit * convertGradeToPoint(course.grade);
-
-      totalGPACreditFw += course.credit;
-      totalPointsFw += course.credit * convertGradeToPoint(course.grade);
+      totalGPACredit += course.credit;
+      totalPoints += course.credit * convertGradeToPoint(course.grade);
     } else {
       if (FDN_GPA_COURSES_FOR_FW.includes(course.courseUnit)) {
-        totalGPACreditFw += course.credit;
-        totalPointsFw += course.credit * convertGradeToPoint(course.grade);
-        totalNonGPACreditFs += course.credit;
+        totalGPACredit += course.credit;
+        totalPoints += course.credit * convertGradeToPoint(course.grade);
       } else {
-        totalNonGPACreditFs += course.credit;
-        totalNonGPACreditFw += course.credit;
+        totalNonGPACredit += course.credit;
       }
     }
   });
 
-  let sgpaFs =
-    totalGPACreditFs > 0
-      ? (totalPointsFs / totalGPACreditFs).toFixed(2)
-      : "N/A";
-  let sgpaFw =
-    totalGPACreditFw > 0
-      ? (totalPointsFw / totalGPACreditFw).toFixed(2)
-      : "N/A";
+  let sgpa =
+    totalGPACredit > 0 ? (totalPoints / totalGPACredit).toFixed(2) : "N/A";
 
-  return [
-    sgpaFs,
-    totalGPACreditFs,
-    totalNonGPACreditFs,
-    sgpaFw,
-    totalGPACreditFw,
-    totalNonGPACreditFw,
-  ];
+  return [sgpa, totalGPACredit, totalNonGPACredit];
 }
 
 // Automatically calculate SGPA when the page loads
@@ -165,14 +144,7 @@ window.addEventListener("load", () => {
   try {
     const results = extractResults();
     if (results.length > 0) {
-      const [
-        sgpaFs,
-        totalGPACreditFs,
-        totalNonGPACreditFs,
-        sgpaFw,
-        totalGPACreditFw,
-        totalNonGPACreditFw,
-      ] = calculateSGPA(results);
+      const [sgpa, totalGPACredit, totalNonGPACredit] = calculateSGPA(results);
 
       // Create a new table to display SGPA, total credits, and non-GPA credits
       const resultTable = document.createElement("table");
@@ -180,24 +152,20 @@ window.addEventListener("load", () => {
             <thead>
               <tr>
                 <th></th>
-                <th>FS</th>
-                <th>FW</th>
+                <th></th>
               </tr>
             <tbody>
               <tr>
                 <td>SGPA</td>
-                <td>${sgpaFs}</td>
-                <td>${sgpaFw}</td>
+                <td>${sgpa}</td>
               </tr>
               <tr>
                 <td>Total GPA Credits</td>
-                <td>${totalGPACreditFs}</td>
-                <td>${totalGPACreditFw}</td>
+                <td>${totalGPACredit}</td>
               </tr>
               <tr>
                 <td>Total Non-GPA Credits</td>
-                <td>${totalNonGPACreditFs}</td>
-                <td>${totalNonGPACreditFw}</td>
+                <td>${totalNonGPACredit}</td>
               </tr>
             </tbody>
           `;
@@ -224,17 +192,18 @@ window.addEventListener("load", () => {
       });
 
       const disclaimer = document.createElement("p");
-      disclaimer.textContent =
-        "Disclaimer : SGPA is calculated based on the grades and credits obtained from the result table. All " +
+      disclaimer.innerHTML =
+        "Disclaimer: The SGPA is calculated based on the grades and credits extracted from the official result table. <br> All " +
         FDN +
-        " courses are considered as non-GPA courses. but " +
+        " courses are treated as non-GPA courses, with the exception of " +
         FDN_GPA_COURSES_FOR_FW +
-        " is considered as GPA course for FW students.";
+        ", which is considered a GPA course. <br> The last digit of the course unit is assumed to represent the credit value of the respective course.";
       disclaimer.style.fontStyle = "italic";
       disclaimer.style.fontSize = "12px";
       disclaimer.style.color = "#666";
       disclaimer.style.marginTop = "20px";
       disclaimer.style.marginBottom = "20px";
+
       disclaimer.style.textAlign = "center";
 
       // Append the new table to the body, after the existing result table
