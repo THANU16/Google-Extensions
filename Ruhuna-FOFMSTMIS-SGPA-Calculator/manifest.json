@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ruhuna - FOFMSTMIS SGPA Calculator",
-  "version": "3.4.2.1709",
+  "version": "3.4.3.1909",
   "description": "Calculates and displays SGPA from grades using the examination website grades on the University of Ruhuna FOFMSTMIS.",
   "permissions": [
     "activeTab"
